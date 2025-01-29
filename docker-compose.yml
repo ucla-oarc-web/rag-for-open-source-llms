@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  langchain_ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "langchain_ollama"
+    network_mode: "host"
+    # Publish ports
+    # Note that the firewall needs to allow access to these ports.
+    # ports:
+      # - "8000:8000"
+      # - "11411:11411"
+    volumes:
+      - "./app:/rag/app"
