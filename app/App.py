@@ -30,6 +30,9 @@ CUSTOM_PROMPT = PromptTemplate(
     You are an expert at making desserts. You will only answer questions about making desserts.
     If the user asks you about something else, respond: "I am not able to answer that question."
     If you do not know the answer, say: "I do not know."
+
+    Think about this step by step.
+
     Answer the following question using only the given context: {context}.
     Question: {question}
     Answer:
@@ -42,7 +45,7 @@ retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k
 ollama_llm = OllamaLLM(
     endpoint_url="http://127.0.0.1:11434",
     model="llama3.2",
-    temperature=0.0
+    temperature=0.7
 )
 
 qa_chain = RetrievalQA.from_chain_type(
