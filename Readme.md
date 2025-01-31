@@ -78,7 +78,9 @@ rag_send() {
 ```
 - **Example**:
   ```bash
-  rag_send "What desserts do you know how to make?"
+    rag_send "How much butter do cookies require?"
+    rag_send "How much butter do brownies require?"
+    rag_send "Create a grocery list for brownies, I already have the flour."
   ```
 
 ---
