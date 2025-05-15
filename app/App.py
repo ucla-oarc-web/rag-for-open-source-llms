@@ -46,14 +46,14 @@ retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k
 ollama_llm = OllamaLLM(
     endpoint_url="http://127.0.0.1:11434",
     model="llama3.2",
-    temperature=0.7
+    temperature=0.0
 )
 
 qa_chain = RetrievalQA.from_chain_type(
     llm=ollama_llm,
     chain_type="stuff",
     retriever=retriever,
-    chain_type_kwargs={"prompt": CUSTOM_PROMPT},
+    chain_type_kwargs={"prompt": CUSTOM_PROMPT}
 )
 
 # Pydantic model for incoming requests

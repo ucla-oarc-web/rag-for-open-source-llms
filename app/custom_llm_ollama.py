@@ -6,7 +6,7 @@ from typing import Optional, List, Mapping, Any
 class OllamaLLM(LLM):
     endpoint_url: str = "http://127.0.0.1:11434"
     model: str = "llama3.2"
-    temperature: float = 0.7
+    temperature: float = 0.0
 
     @property
     def _llm_type(self) -> str:
