@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from custom_llm_ollama import OllamaLLM
+from langchain_huggingface import HuggingFaceEmbeddings
 
 app = FastAPI()
 

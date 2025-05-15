@@ -6,3 +6,4 @@ chromadb
 sentence-transformers
 requests
 langchain-community
+langchain-huggingface
