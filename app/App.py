@@ -17,7 +17,11 @@ Brownies: Preheat oven to 350°F (175°C), melt 1/2 cup butter, stir in 1 cup su
 """
 
 # Split text into smaller chunks
-text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=0)
+text_splitter = CharacterTextSplitter(
+    chunk_size=300,
+    chunk_overlap=0,
+    separator="\n"
+)
 doc_chunks = text_splitter.create_documents([docs_text])
 
 # Create local embeddings & store in a local vector db. Knowledge is lost on quit
@@ -28,9 +32,10 @@ vectorstore = FAISS.from_documents(doc_chunks, embedding=embed_model)
 # This is where you get to define what is sent to the llm. Remember, the llm/fm models do not access the knowledge base directly. You need to tell it what you want to know. This includes conversation. Unless you load the conversation as part of the query, the model will not have access to it.
 CUSTOM_PROMPT = PromptTemplate(
     template="""
-    You are an expert at making desserts. You will only answer questions about making desserts.
-    If the user asks you about something else, respond: "I am not able to answer that question."
-    If you do not know the answer, say: "I do not know."
+    You are an expert at making desserts.  You will *only* answer questions about making desserts using the given context.
+    - If the user asks about something not in the context, respond exactly:
+      I do not know.
+    - Do not repeat the question in your answer.
 
     Think about this step by step.
 
@@ -42,7 +47,10 @@ CUSTOM_PROMPT = PromptTemplate(
 )
 
 # Create a retrieval-based QA chain using Ollama as the LLM
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 2})
+retriever = vectorstore.as_retriever(
+    search_type="similarity",
+    search_kwargs={"k": 1}
+)
 ollama_llm = OllamaLLM(
     endpoint_url="http://127.0.0.1:11434",
     model="llama3.2",
