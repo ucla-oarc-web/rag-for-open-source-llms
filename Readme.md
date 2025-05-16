@@ -78,9 +78,11 @@ rag_send() {
 ```
 - **Example**:
   ```bash
+    rag_send "Who is Anthony Doolan?"
     rag_send "How much butter do cookies require?"
     rag_send "How much butter do brownies require?"
     rag_send "Create a grocery list for brownies, I already have the flour."
+    rag_send "How much butter does cheesecake require?"
   ```
 
 ---
