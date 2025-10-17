@@ -15,6 +15,8 @@ This project demonstrates a Retrieval-Augmented Generation (RAG) workflow using 
    - Ensure “Enable host networking” is enabled in your Docker settings.
    - Alternatively, configure port forwarding or SSH tunnels.
 
+3. **Documents for the knowledge base**
+   - You will get an error if you do not create the document folder and add txt documents at `app/documents`.
 ---
 
 ## Components
