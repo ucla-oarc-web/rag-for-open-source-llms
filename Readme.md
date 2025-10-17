@@ -1,12 +1,12 @@
 # README
 
 ## Overview
-This project demonstrates a Retrieval-Augmented Generation (RAG) workflow using [Ollama](https://github.com/jmorganca/ollama), FAISS, and LangChain. It provides a simple pipeline for vector-based semantic search and question-answering.
+This project demonstrates a Retrieval-Augmented Generation (RAG) workflow using Ollama, FAISS, and LangChain. It provides a simple pipeline for vector-based semantic search and question-answering.
 
 ---
 
 ## Requirements
-1. **Ollama (version 3.2)**
+1. **Ollama**
    - Run `ollama serve` locally.
    - Confirm it’s running on localhost by visiting `http://127.0.0.1:11434/` in the browser; it should display **"Ollama is running"**.
 
@@ -79,12 +79,8 @@ rag_send() {
 - **Example**:
   ```bash
     rag_send "Who is Anthony Doolan?"
-    rag_send "How much butter do cookies require?"
-    rag_send "How much butter do brownies require?"
-    rag_send "Create a grocery list for brownies, I already have the flour."
-    rag_send "How much butter does cheesecake require?"
+    rag_send "How does adding more people to a software project impact the outcome?"
   ```
-
 ---
 
 After rebuilding, confirm that your containers and Ollama are running correctly before sending queries.

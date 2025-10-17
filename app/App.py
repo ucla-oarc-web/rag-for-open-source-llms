@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
+from pathlib import Path
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -10,19 +11,22 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 app = FastAPI()
 
-# Create an in memory knowledge base
-docs_text = """
-Chocolate Chip Cookies: Preheat oven to 375°F (190°C), mix 2 1/4 cups all-purpose flour, 1 tsp baking soda, and 1/2 tsp salt; in another bowl, beat 1 cup softened butter, 3/4 cup granulated sugar, 3/4 cup brown sugar, and 1 tsp vanilla extract; add 2 large eggs one at a time; gradually mix in dry ingredients; stir in 2 cups chocolate chips; drop by spoonfuls onto ungreased baking sheets; bake for 8-10 minutes or until golden brown.
-Brownies: Preheat oven to 350°F (175°C), melt 1/2 cup butter, stir in 1 cup sugar, 2 eggs, and 1 tsp vanilla extract; mix in 1/3 cup cocoa powder, 1/2 cup flour, 1/4 tsp salt, and 1/4 tsp baking powder; pour into a greased 8x8-inch pan; bake for 20-25 minutes or until the center is set. Enjoy!
-"""
 
 # Split text into smaller chunks
 text_splitter = CharacterTextSplitter(
-    chunk_size=300,
-    chunk_overlap=0,
-    separator="\n"
+    chunk_size=3000,
+    chunk_overlap=50,
+    separator="\n\n"
 )
-doc_chunks = text_splitter.create_documents([docs_text])
+
+doc_chunks = []
+for file_path in Path("documents").glob("*.txt"):
+    text = file_path.read_text(encoding="utf-8")
+    chunks = text_splitter.create_documents(
+        [text],
+        metadatas=[{"source": file_path.name}]
+    )
+    doc_chunks.extend(chunks)
 
 # Create local embeddings & store in a local vector db. Knowledge is lost on quit
 embed_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
@@ -32,13 +36,20 @@ vectorstore = FAISS.from_documents(doc_chunks, embedding=embed_model)
 # This is where you get to define what is sent to the llm. Remember, the llm/fm models do not access the knowledge base directly. You need to tell it what you want to know. This includes conversation. Unless you load the conversation as part of the query, the model will not have access to it.
 CUSTOM_PROMPT = PromptTemplate(
     template="""
-    You are an expert at making desserts.  You will *only* answer questions about making desserts using the given context.
+    INCLUDE
+    You are an expert at answering questions about the Mythical Man Month.
+    You will *only* answer questions using the given context.
     - If the user asks about something not in the context, respond exactly:
       I do not know.
     - Do not repeat the question in your answer.
 
+    RESTRICT
+    - Limit responses to 150 words or less.
+
+    ADD
     Think about this step by step.
 
+    REPEAT & POSITION
     Answer the following question using only the given context: {context}.
     Question: {question}
     Answer:
@@ -49,7 +60,7 @@ CUSTOM_PROMPT = PromptTemplate(
 # Create a retrieval-based QA chain using Ollama as the LLM
 retriever = vectorstore.as_retriever(
     search_type="similarity",
-    search_kwargs={"k": 1}
+    search_kwargs={"k": 3}
 )
 ollama_llm = OllamaLLM(
     endpoint_url="http://127.0.0.1:11434",
