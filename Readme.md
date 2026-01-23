@@ -115,10 +115,11 @@ agent_send() {
   ```bash
   docker logs langchain_ollama
   ```
+
   Message Types show:
-    Type: human = the original question from the human.
-    Type: ai = Tool requests and thoughts.
-    Type: tool = Tool function output send to the agent.
+   * Type: human = the original question from the human.
+   * Type: ai = Tool requests and thoughts.
+   * Type: tool = Tool function output send to the agent.
 ---
 
 After rebuilding, confirm that your containers and Ollama are running correctly before sending queries.
