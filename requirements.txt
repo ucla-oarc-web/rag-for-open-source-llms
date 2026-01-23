@@ -1,9 +1,19 @@
+# Web framework
 fastapi
 uvicorn
+
+# LangChain core packages
 langchain
-faiss-cpu
-chromadb
-sentence-transformers
-requests
+langchain-core
+langchain-text-splitters
 langchain-community
 langchain-huggingface
+langchain-ollama
+
+# Vector store and embeddings
+faiss-cpu
+sentence-transformers
+
+# Agent tools
+duckduckgo-search
+ddgs
