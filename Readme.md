@@ -6,9 +6,9 @@ This project demonstrates a Retrieval-Augmented Generation (RAG) workflow using 
 ---
 
 ## Knowledge Base
-To create the documents in ./app/documents I used (The Mythical Manmonth PDF)[https://ia801600.us.archive.org/12/items/MythicalManMonth/Brooks%201974%20The%20Mythical%20Man-Month-%20Essays%20on%20Software%20Engineering%2C%20Anniversary%20Edition%20%282nd%20Edition%29.pdf] from https://us.archive.org.
+To create the documents in ./app/documents I used [The Mythical Manmonth PDF](https://ia801600.us.archive.org/12/items/MythicalManMonth/Brooks%201974%20The%20Mythical%20Man-Month-%20Essays%20on%20Software%20Engineering%2C%20Anniversary%20Edition%20%282nd%20Edition%29.pdf) from https://us.archive.org.
 
-I manually copied each chapter into its own tet file to help the retravial process get context based on chapters. It wpuld be a simple change to update the knowledge base to use a PDF loader from pypdf to load the PDF automatically into text, then use CharacterTextSplitter to load the text into the vectore store. Even better if you use langchains RecursiveCharacterTextSplitter.
+I manually copied each chapter into its own tet file to help the retravial process get context based on chapters. It wpuld be a simple change to update the knowledge base to use a PDF loader from pypdf to load the PDF automatically into text, then use CharacterTextSplitter to load the text into the vectore store. Even better if you use LangChains RecursiveCharacterTextSplitter.
 
 ---
 
