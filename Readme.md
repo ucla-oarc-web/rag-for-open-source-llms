@@ -73,9 +73,9 @@ rag_send() {
   fi
 
   local query="$1"
-  curl -X POST -H "Content-Type: application/json" \
+  curl -s -X POST -H "Content-Type: application/json" \
        -d "{\"question\": \"$query\"}" \
-       http://localhost:8000/query
+       http://localhost:8000/query | jq -r '.'
 }
 ```
 - **Example**:
@@ -83,6 +83,42 @@ rag_send() {
     rag_send "Who is Anthony Doolan?"
     rag_send "How does adding more people to a software project impact the outcome?"
   ```
+
+### Agent Request (Curl Wrapper)
+```bash
+agent_send() {
+  if [ -z "$1" ]; then
+    echo "Usage: agent_send \"<query>\" [session_id]"
+    return 1
+  fi
+
+  local query="$1"
+  local session_id="${2:-chat1}"
+
+  curl -s -X POST -H "Content-Type: application/json" \
+       -d "{\"question\": \"$query\", \"session_id\": \"$session_id\"}" \
+       http://localhost:8000/agent | jq -r '"Tools: \(.tools_used | join(", "))\nSession: \(.session_id // "none")\n\nAnswer: \(.answer)"'
+}
+```
+- **Example**:
+  ```bash
+    # Uses default session "chat1"
+    agent_send "Who is Anthony Doolan at OARC UCLA?"
+    agent_send "What is Brooks' Law?"
+    agent_send "Can you explain that further?"
+
+    # Start a new conversation with a different session
+    agent_send "What is Brooks' Law from the Mythical Man Month, and are there any recent news articles about companies experiencing this problem?" chat2
+  ```
+
+- **Debugging the Agent**:
+  ```bash
+  docker logs langchain_ollama
+  ```
+  Message Types show:
+    Type: human = the original question from the human.
+    Type: ai = Tool requests and thoughts.
+    Type: tool = Tool function output send to the agent.
 ---
 
 After rebuilding, confirm that your containers and Ollama are running correctly before sending queries.
